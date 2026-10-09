@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indian Legal AI Assistant — Autonomous Agentic Intelligence & Legal RAG</title>
+  <meta name="description" content="State-of-the-art Indian Legal AI Assistant powered by multi-agent workflows and semantic RAG across 442,500+ clauses of the Constitution of India, BNS 2023, BNSS 2023, BSA 2023, IT Act, and landmark judicial rulings." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+  
+  <!-- Google Fonts: Playfair Display + Outfit + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="theme-obsidian">
+
+<div class="app-layout">
+
+  <!-- ══════════════════════════════════════════
+       SIDEBAR NAVIGATION & HISTORY
+  ═══════════════════════════════════════════ -->
+  <aside class="sidebar" id="app-sidebar">
+    
+    <!-- Sidebar Header / Brand -->
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-emblem-wrap">
+          <div class="brand-emblem">⚖️</div>
+          <div class="brand-emblem-glow"></div>
+        </div>
+        <div class="brand-info">
+          <div class="brand-title">Indian Legal AI</div>
+          <div class="brand-subtitle">Autonomous Legal Agent</div>
+        </div>
+      </div>
+      <button class="icon-btn close-sidebar-btn" id="close-sidebar-btn" aria-label="Close sidebar">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+
+    <!-- New Consultation Action Button -->
+    <div class="sidebar-action-wrap">
+      <button class="btn btn-gold new-chat-btn" id="new-chat-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        <span>New Consultation</span>
+      </button>
+    </div>
+
+    <!-- Mode Selector Cards in Sidebar -->
+    <div class="sidebar-mode-selector">
+      <div class="sidebar-sec-label">Operating Intelligence Mode</div>
+      <div class="mode-select-grid">
+        <button class="mode-select-card active" id="side-mode-agentic" data-mode="agentic">
+          <div class="msc-icon">🤖</div>
+          <div class="msc-info">
+            <div class="msc-title">Multi-Agent Engine</div>
+            <div class="msc-desc">Router + Verifier + Synthesis</div>
+          </div>
+          <span class="msc-badge">Agentic</span>
+        </button>
+        <button class="mode-select-card" id="side-mode-rag" data-mode="rag">
+          <div class="msc-icon">⚡</div>
+          <div class="msc-info">
+            <div class="msc-title">Fast Direct RAG</div>
+            <div class="msc-desc">Rapid Statutory Q&A</div>
+          </div>
+        </button>
+        <button class="mode-select-card" id="side-mode-search" data-mode="search">
+          <div class="msc-icon">🔍</div>
+          <div class="msc-info">
+            <div class="msc-title">Vector Clause Explorer</div>
+            <div class="msc-desc">442k+ Raw FAISS Search</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- History Search Bar -->
+    <div class="history-search-wrap">
+      <div class="search-input-box">
+        <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 14z"/></svg>
+        <input type="text" id="history-search" placeholder="Search saved consultations..." />
+      </div>
+    </div>
+
+    <!-- Consultation History Stream -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-header">
+        <span class="section-title">Consultation History</span>
+        <button class="clear-history-btn" id="clear-all-history-btn" title="Clear all history">Clear All</button>
+      </div>
+      <div class="history-list" id="history-list">
+        <p class="history-empty">No previous consultations</p>
+      </div>
+    </div>
+
+    <!-- Legal Corpus Stats Footer -->
+    <div class="sidebar-footer">
+      <div class="dataset-meta-card">
+        <div class="dataset-meta-title">
+          <span class="pulse-dot"></span>
+          <span>Indexed Indian Legal Corpus</span>
+        </div>
+        <div class="dataset-stats">
+          <span class="stat-highlight" id="footer-chunk-count">442,528</span> verified legal clauses
+        </div>
+        <div class="dataset-tags">
+          <span class="d-tag">Constitution</span>
+          <span class="d-tag">BNS 2023</span>
+          <span class="d-tag">BNSS 2023</span>
+          <span class="d-tag">BSA 2023</span>
+          <span class="d-tag">IT Act</span>
+          <span class="d-tag">Precedents</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Sidebar Overlay for Mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN WORKSPACE AREA
+  ═══════════════════════════════════════════ -->
+  <main class="main-workspace">
+
+    <!-- Topbar Navigation -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn mobile-menu-btn" id="mobile-menu-btn" aria-label="Open navigation menu">
+          <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        
+        <!-- Primary 3-Point Mode Tabs -->
+        <div class="mode-tabs" role="tablist">
+          <button class="mode-tab active" id="tab-agentic" role="tab" aria-selected="true" data-mode="agentic">
+            <span class="tab-icon">🤖</span>
+            <span class="tab-label">Multi-Agent Workflow</span>
+            <span class="tab-badge">4-Stage</span>
+          </button>
+          <button class="mode-tab" id="tab-rag-chat" role="tab" aria-selected="false" data-mode="rag">
+            <span class="tab-icon">⚡</span>
+            <span class="tab-label">Fast Legal RAG</span>
+          </button>
+          <button class="mode-tab" id="tab-vector-search" role="tab" aria-selected="false" data-mode="search">
+            <span class="tab-icon">🔍</span>
+            <span class="tab-label">Clause & Vector Explorer</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <!-- Live System Metric Pill -->
+        <div class="system-pill" id="system-status-pill" title="System Operational & Vector DB Active">
+          <span class="status-indicator online"></span>
+          <span class="pill-text" id="status-model-text">FAISS 442k • Multi-Agent</span>
+        </div>
+
+        <!-- Theme Selector Toggle -->
+        <button class="icon-btn theme-toggle-btn" id="theme-toggle-btn" title="Toggle Theme (Obsidian / Indigo / Slate)" aria-label="Toggle Theme">
+          <span id="theme-icon">✨</span>
+        </button>
+
+        <!-- Configuration Settings Modal Trigger -->
+        <button class="icon-btn" id="open-settings-btn" title="Model, Top-K & Agent Configuration" aria-label="Settings">
+          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </button>
+
+        <!-- Health / Diagnostics Modal Trigger -->
+        <button class="icon-btn" id="open-health-btn" title="Dataset & Diagnostics Overview" aria-label="System Diagnostics">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        </button>
+
+        <!-- Export Consultation Button -->
+        <button class="btn btn-outline export-chat-btn" id="export-chat-btn" title="Export current legal consultation">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          <span class="btn-text">Export</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ══════════════════════════════════════════
+         VIEW 1 & 2: AI CONSULTATION VIEW (AGENTIC & RAG)
+    ═══════════════════════════════════════════ -->
+    <section class="view-panel active" id="view-rag-chat">
+      
+      <div class="chat-viewport" id="chat-viewport">
+        
+        <!-- Welcome Hero Screen -->
+        <div class="welcome-hero" id="welcome-hero">
+          
+          <div class="hero-crest">
+            <div class="crest-emblem">⚖️</div>
+            <div class="crest-rings">
+              <div class="ring ring-1"></div>
+              <div class="ring ring-2"></div>
+            </div>
+          </div>
+          
+          <h1 class="hero-headline">Indian Legal AI Assistant</h1>
+          <p class="hero-tagline">Autonomous Multi-Agent Legal Intelligence & Statutory Verification</p>
+          <p class="hero-description">
+            Ask any complex question regarding Indian Law. The autonomous multi-agent pipeline routes queries, retrieves verified statutory clauses across 
+            <strong>442,500+ indexed segments</strong> (Constitution, BNS 2023, BNSS 2023, BSA 2023, IT Act), validates evidence sufficiency, and delivers structured legal advisory.
+          </p>
+
+          <!-- 3-Pillar Capability Cards -->
+          <div class="hero-pillars-grid">
+            <div class="pillar-card">
+              <div class="pillar-icon">🧭</div>
+              <div class="pillar-title">1. Query Router Agent</div>
+              <div class="pillar-desc">Classifies inquiries into Constitutional, Criminal, Evidence, Cyber, or Civil domains with targeted statutory scoping.</div>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-icon">🛡️</div>
+              <div class="pillar-title">2. Evidence Verification</div>
+              <div class="pillar-desc">Evaluates retrieved clauses for sufficiency, authentic statutory basis, and strict anti-hallucination grounding.</div>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-icon">⚖️</div>
+              <div class="pillar-title">3. Structured Synthesis</div>
+              <div class="pillar-desc">Generates authoritative opinions with bold statutory penalties, relevant precedents, and actionable takeaways.</div>
+            </div>
+          </div>
+
+          <!-- Prompt Library Categories -->
+          <div class="category-section">
+            <div class="category-header">
+              <span class="cat-label">🏛️ Explore by Legal Domain & Key Precedents</span>
+            </div>
+            
+            <div class="prompts-grid">
+              
+              <div class="prompt-card" data-query="What are the Fundamental Rights guaranteed under Articles 14, 19, and 21 of the Constitution of India, and how does the Supreme Court protect them?">
+                <div class="pc-header">
+                  <span class="pc-badge constitution">Constitution of India</span>
+                  <span class="pc-arrow">↗</span>
+                </div>
+                <div class="pc-title">Fundamental Rights & Due Process</div>
+                <div class="pc-desc">Articles 14, 19, 21 guarantees, reasonable restrictions, and writ protection under Article 32.</div>
+              </div>
+
+              <div class="prompt-card" data-query="What constitutes murder and culpable homicide not amounting to murder under the Bharatiya Nyaya Sanhita (BNS) 2023, and what are the specific penalties?">
+                <div class="pc-header">
+                  <span class="pc-badge bns">BNS 2023 (Criminal)</span>
+                  <span class="pc-arrow">↗</span>
+                </div>
+                <div class="pc-title">Murder & Homicide under BNS 2023</div>
+                <div class="pc-desc">Sections 100, 101, 103 provisions, exceptions, and mandatory punishments in the new code.</div>
+              </div>
+
+              <div class="prompt-card" data-query="What are the mandatory statutory rights of an arrested person and the strict procedure for police remand under BNSS 2023?">
+                <div class="pc-header">
+                  <span class="pc-badge bnss">BNSS 2023 (Procedure)</span>
+                  <span class="pc-arrow">↗</span>
+                </div>
+                <div class="pc-title">Arrest Rights & Remand Procedure</div>
+                <div class="pc-desc">Statutory guidelines for arrest memo, 24-hour magistrate production, medical tests, and remand.</div>
+              </div>
+
+              <div class="prompt-card" data-query="How is electronic and digital evidence authenticated and admitted under Section 63 of the Bharatiya Sakshya Adhiniyam (BSA) 2023?">
+                <div class="pc-header">
+                  <span class="pc-badge bsa">BSA 2023 (Evidence)</span>
+                  <span class="pc-arrow">↗</span>
+                </div>
+                <div class="pc-title">Digital & Electronic Evidence</div>
+                <div class="pc-desc">Certificate requirements, conditions for electronic record admissibility replacing Sec 65B.</div>
+              </div>
+
+              <div class="prompt-card" data-query="What are the penal provisions for identity theft, cheating by personation, and unauthorized access under the Information Technology Act 2000?">
+                <div class="pc-header">
+                  <span class="pc-badge cyber">Cyber Law (IT Act)</span>
+                  <span class="pc-arrow">↗</span>
+                </div>
+                <div class="pc-title">Cyber Crimes & Data Theft</div>
+                <div class="pc-desc">Sections 43, 66, 66C, and 66D penalties, fines, and cognizable cyber offences.</div>
+              </div>
+
+              <div class="prompt-card" data-query="What are the essential conditions for a valid contract and the remedies for breach under the Indian Contract Act 1872?">
+                <div class="pc-header">
+                  <span class="pc-badge corporate">Civil & Contracts</span>
+                  <span class="pc-arrow">↗</span>
+                </div>
+                <div class="pc-title">Contractual Validity & Breach</div>
+                <div class="pc-desc">Free consent, lawful consideration, liquidated damages, and specific performance remedies.</div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Chat Conversation Messages Container -->
+        <div class="messages-stream" id="messages-stream"></div>
+
+      </div>
+
+      <!-- Bottom Floating Composer Container -->
+      <div class="composer-container">
+        
+        <!-- Quick Domain Override Chips & Active Settings Strip -->
+        <div class="composer-toolbar">
+          <div class="composer-domain-chips">
+            <span class="domain-chip active" data-domain="auto">🌐 Auto Domain</span>
+            <span class="domain-chip" data-domain="Constitution">📜 Constitution</span>
+            <span class="domain-chip" data-domain="Criminal Law">⚖️ BNS / BNSS</span>
+            <span class="domain-chip" data-domain="Evidence">🛡️ BSA Evidence</span>
+            <span class="domain-chip" data-domain="Cyber Law">💻 Cyber IT Act</span>
+            <span class="domain-chip" data-domain="Civil Law">📑 Civil / Contract</span>
+          </div>
+          <div class="composer-tags">
+            <span class="chip-active-mode" id="composer-mode-tag">🤖 Multi-Agent Active</span>
+            <span class="chip-active-model" id="composer-model-tag">Model: gpt-oss-20b</span>
+            <button class="clear-convo-link" id="composer-clear-btn" title="Reset consultation">Clear Chat</button>
+          </div>
+        </div>
+
+        <!-- Input Box Card -->
+        <div class="input-card">
+          <!-- Voice Dictation Button (Web Speech API) -->
+          <button class="input-action-btn mic-btn" id="voice-dictate-btn" title="Voice Input: Speak your legal query (Dictation)">
+            <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.91-3c-.49 0-.9.36-.98.85C16.52 14.2 14.47 16 12 16s-4.52-1.8-4.93-4.15c-.08-.49-.49-.85-.98-.85-.61 0-1.09.54-1 1.14.49 3 2.89 5.35 5.91 5.78V20c0 .55.45 1 1 1s1-.45 1-1v-2.08c3.02-.43 5.42-2.78 5.91-5.78.1-.6-.38-1.14-1-1.14z"/></svg>
+            <span class="recording-pulse"></span>
+          </button>
+
+          <textarea
+            id="legal-query-input"
+            rows="1"
+            placeholder="Ask any question on Indian Law, statutory sections, articles, bail, or landmark judgments…"
+            aria-label="Indian Legal Question Input"
+          ></textarea>
+
+          <!-- Submit Button -->
+          <button class="input-send-btn" id="send-query-btn" aria-label="Submit Legal Query">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+
+        <div class="composer-footnote">
+          <span>Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to submit</span>
+          <span class="dot-sep">•</span>
+          <span>Verified against 442k+ Indian legal vectors</span>
+          <span class="dot-sep">•</span>
+          <a href="#" id="view-disclaimer-link">Legal Disclaimer & Ethics</a>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         VIEW 3: DIRECT CLAUSE & VECTOR EXPLORER
+    ═══════════════════════════════════════════ -->
+    <section class="view-panel" id="view-vector-search">
+      
+      <div class="search-view-container">
+        
+        <div class="search-header-panel">
+          <div class="search-header-badge">Semantic Vector Space</div>
+          <h2 class="search-title">🔍 Legal Vector Database & Clause Explorer</h2>
+          <p class="search-subtitle">
+            Perform direct semantic vector queries across 442,528 raw document segments without LLM summarization. 
+            Inspect verbatim legal acts, statutory sections, and court judgment transcripts.
+          </p>
+
+          <div class="search-bar-wrapper">
+            <div class="search-bar-inner">
+              <svg class="sb-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              <input
+                type="text"
+                id="direct-vector-query"
+                placeholder="Search verbatim clauses (e.g., 'Article 32 writ jurisdiction', 'Section 103 BNS murder', 'Anticipatory bail BNSS 482')..."
+              />
+              <button class="btn btn-gold" id="direct-search-btn">
+                <span>Vector Search</span>
+              </button>
+            </div>
+
+            <!-- Quick Filter Tags -->
+            <div class="search-filter-pills">
+              <span class="filter-pill" data-search="Constitution Article 21 Right to Life and Personal Liberty">Constitution Art. 21</span>
+              <span class="filter-pill" data-search="Bharatiya Nyaya Sanhita Section 69 sexual offences on deceitful promise">BNS Sec. 69</span>
+              <span class="filter-pill" data-search="BNSS Section 482 inherent powers high court bail">BNSS High Court Powers</span>
+              <span class="filter-pill" data-search="Electronic certificate Section 63 BSA electronic evidence">BSA Sec. 63 Certificate</span>
+              <span class="filter-pill" data-search="Section 138 Negotiable Instruments Act cheque bounce notice">Cheque Bounce NI Act</span>
+              <span class="filter-pill" data-search="Information Technology Act Section 66C identity theft penalty">IT Act Identity Theft</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Results Grid / Stream -->
+        <div class="search-results-viewport">
+          <div class="search-results-meta" id="search-results-meta" style="display:none;">
+            <span id="results-count-text">Found 8 relevant document chunks</span>
+            <span class="meta-timing" id="results-timing-text"></span>
+          </div>
+
+          <div class="results-grid" id="search-results-grid">
+            <div class="search-empty-state">
+              <div class="ses-icon">📜</div>
+              <h3>Explore 442,500+ Indian Legal Clauses</h3>
+              <p>Type any keyword, statutory reference, or legal principle above to retrieve matching verbatim clauses ranked by vector distance.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODALS & DIALOGS
+═══════════════════════════════════════════ -->
+
+<!-- 1. SOURCE CHUNK INSPECTOR MODAL -->
+<div class="modal-backdrop" id="chunk-modal" role="dialog" aria-modal="true" aria-labelledby="chunk-modal-title">
+  <div class="modal-container">
+    
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-emblem">📄</span>
+        <div>
+          <h3 class="modal-title" id="chunk-modal-title">Legal Source Clause Inspector</h3>
+          <div class="modal-subtitle" id="chunk-modal-source">Source: Constitution of India</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="close-chunk-modal-btn" aria-label="Close Inspector">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      
+      <div class="chunk-meta-bar">
+        <div class="chunk-stat">
+          <span class="cs-label">Document Type</span>
+          <span class="cs-value" id="chunk-modal-type">Act / Statute</span>
+        </div>
+        <div class="chunk-stat">
+          <span class="cs-label">Relevance Score</span>
+          <span class="cs-value gold" id="chunk-modal-score">94%</span>
+        </div>
+        <div class="chunk-stat">
+          <span class="cs-label">Vector Distance (L2)</span>
+          <span class="cs-value" id="chunk-modal-dist">0.245</span>
+        </div>
+        <div class="chunk-stat">
+          <span class="cs-label">Chunk Index</span>
+          <span class="cs-value" id="chunk-modal-id">#18239</span>
+        </div>
+      </div>
+
+      <div class="chunk-text-box">
+        <div class="box-header">
+          <span>Verbatim Indexed Statute / Case Law Text</span>
+          <button class="copy-chunk-btn" id="copy-chunk-text-btn" title="Copy full text to clipboard">
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <span>Copy Text</span>
+          </button>
+        </div>
+        <pre class="chunk-pre" id="chunk-modal-text"></pre>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="close-chunk-modal-footer">Close</button>
+      <button class="btn btn-gold" id="ask-about-chunk-btn">
+        <span>Ask AI about this clause</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 2. SETTINGS & AGENTIC CONFIGURATION MODAL -->
+<div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+  <div class="modal-container modal-md">
+    
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-emblem">⚙️</span>
+        <div>
+          <h3 class="modal-title" id="settings-modal-title">System & Agent Configuration</h3>
+          <div class="modal-subtitle">Customize model engine, multi-agent pipeline, and retrieval parameters</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="close-settings-modal-btn">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      
+      <div class="setting-group">
+        <label class="setting-label" for="setting-model-select">Groq LLM Intelligence Engine</label>
+        <p class="setting-desc">Choose foundational language model for legal analysis and synthesis.</p>
+        <select class="setting-select" id="setting-model-select">
+          <option value="openai/gpt-oss-20b" selected>GPT-OSS 20B (High Accuracy & Speed — Recommended)</option>
+          <option value="openai/gpt-oss-120b">GPT-OSS 120B (Deep Legal Analysis & Precedents)</option>
+          <option value="qwen/qwen3.8-27b">Qwen 3.8 27B (Advanced Legal Reasoning)</option>
+          <option value="allam-2-7b">Allam 2 7B (Lightweight)</option>
+        </select>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label" for="setting-mode-select">Default Intelligence Pipeline</label>
+        <p class="setting-desc">Select whether queries undergo multi-agent verification or direct single-pass RAG.</p>
+        <select class="setting-select" id="setting-mode-select">
+          <option value="agentic" selected>Autonomous Multi-Agent (Router + FAISS + Verifier + Synthesis)</option>
+          <option value="rag">Fast Direct RAG (Single-pass retrieval & synthesis)</option>
+        </select>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-row">
+          <div>
+            <label class="setting-label" for="setting-topk-slider">Context Chunks Retrieved (Top-K)</label>
+            <p class="setting-desc">Number of legal clauses retrieved from the 442k+ FAISS vector index.</p>
+          </div>
+          <span class="setting-val-badge" id="setting-topk-val">5 Chunks</span>
+        </div>
+        <input type="range" class="setting-slider" id="setting-topk-slider" min="1" max="15" value="5" step="1" />
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-row">
+          <div>
+            <label class="setting-label" for="setting-temp-slider">Temperature (Precision vs Creativity)</label>
+            <p class="setting-desc">Lower values (0.0 - 0.2) ensure strictly grounded, factual statutory citations.</p>
+          </div>
+          <span class="setting-val-badge" id="setting-temp-val">0.2</span>
+        </div>
+        <input type="range" class="setting-slider" id="setting-temp-slider" min="0.0" max="1.0" value="0.2" step="0.05" />
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Display & Accessibility</label>
+        <div class="toggle-row">
+          <span>Auto-scroll to latest response during generation</span>
+          <input type="checkbox" id="setting-autoscroll" checked />
+        </div>
+        <div class="toggle-row">
+          <span>Highlight statutory citations (Sections / Articles / Acts)</span>
+          <input type="checkbox" id="setting-citation-highlight" checked />
+        </div>
+        <div class="toggle-row">
+          <span>Show detailed agent execution steps and timing</span>
+          <input type="checkbox" id="setting-show-agent-steps" checked />
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="reset-settings-btn">Reset Defaults</button>
+      <button class="btn btn-gold" id="save-settings-btn">Save Configuration</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 3. SYSTEM HEALTH & DIAGNOSTICS MODAL -->
+<div class="modal-backdrop" id="health-modal" role="dialog" aria-modal="true">
+  <div class="modal-container modal-md">
+    
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-emblem">📊</span>
+        <div>
+          <h3 class="modal-title">System Health & Dataset Diagnostics</h3>
+          <div class="modal-subtitle">Indian Legal Knowledge Base Metrics</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="close-health-modal-btn">&times;</button>
+    </div>
+
+    <div class="modal-body" id="health-modal-content">
+      <div class="loading-spinner-wrap">
+        <div class="spinner"></div>
+        <p>Querying backend diagnostics…</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="close-health-footer-btn">Close</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 4. DISCLAIMER & ETHICS MODAL -->
+<div class="modal-backdrop" id="disclaimer-modal" role="dialog" aria-modal="true">
+  <div class="modal-container modal-sm">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-emblem">⚖️</span>
+        <div>
+          <h3 class="modal-title">Legal Disclaimer & Ethics</h3>
+        </div>
+      </div>
+      <button class="modal-close-btn" id="close-disclaimer-modal-btn">&times;</button>
+    </div>
+    <div class="modal-body disclaimer-body">
+      <p><strong>Indian Legal AI Assistant</strong> is an autonomous legal research and intelligence platform powered by Retrieval-Augmented Generation (RAG) and specialized multi-agent verification.</p>
+      <p>All answers are synthesized from indexed public statutes including the Constitution of India, Bharatiya Nyaya Sanhita (BNS 2023), Bharatiya Nagarik Suraksha Sanhita (BNSS 2023), Bharatiya Sakshya Adhiniyam (BSA 2023), Information Technology Act 2000, and judicial precedents.</p>
+      <div class="alert-box">
+        ⚠️ <strong>Important Notice:</strong> Outputs generated by this AI assistant are intended strictly for educational, informational, and preliminary research purposes. They do not constitute formal legal counsel or create an advocate-client relationship. Please consult an advocate of the Bar Council of India for formal case-specific advice.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-gold" id="ack-disclaimer-btn">I Understand & Acknowledge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification Stack -->
+<div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
