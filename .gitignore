@@ -1,0 +1,16 @@
+# API keys and environment variables
+
+.env
+.env.*
+!.env.example
+
+# Python
+
+**pycache**/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets and local configuration
+
+secrets/
